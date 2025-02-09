@@ -19,9 +19,9 @@ class RecipeMapper {
         )
 
 
-    private fun mapCoffeeProductEntityToDbModel(coffeeProduct: CoffeeProduct): CoffeeProductDbModel =
+    private fun mapCoffeeProductEntityToDbModel(coffeeProduct: CoffeeProduct?): CoffeeProductDbModel =
         CoffeeProductDbModel(
-            productId = coffeeProduct.productId,
+            productId = coffeeProduct!!.productId,
             name = coffeeProduct.name,
             region = coffeeProduct.region,
             imageUrl = coffeeProduct.imageUrl
@@ -45,9 +45,9 @@ class RecipeMapper {
         )
 
 
-    private fun mapCoffeeProductDbModelToEntity(coffeeProductDb: CoffeeProductDbModel):
+    private fun mapCoffeeProductDbModelToEntity(coffeeProductDb: CoffeeProductDbModel?):
             CoffeeProduct = CoffeeProduct(
-        productId = coffeeProductDb.productId,
+        productId = coffeeProductDb!!.productId,
         name = coffeeProductDb.name,
         region = coffeeProductDb.region,
         imageUrl = coffeeProductDb.imageUrl

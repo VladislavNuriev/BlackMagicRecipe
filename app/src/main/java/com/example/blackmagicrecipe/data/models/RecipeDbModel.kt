@@ -9,9 +9,9 @@ import com.example.blackmagicrecipe.domain.entites.BrewingType
 data class RecipeDbModel (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    var brewingType: BrewingType,
+    var brewingType: BrewingType?,
     @Embedded
-    val coffeeProduct: CoffeeProductDbModel,
+    val coffeeProduct: CoffeeProductDbModel?,
     val brewingTime: Int?,
     @Embedded
     val evaluation: CoffeeEvaluationDbModel

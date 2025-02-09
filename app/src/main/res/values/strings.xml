@@ -4,4 +4,19 @@
     <string name="start_timer">Start timer</string>
     <string name="evaluate_your_cup">Evaluate your cup</string>
     <string name="save_black_magic">Save black magic</string>
+
+    <string-array name="brew_methods_array">
+        <item>Espresso Machine</item>
+        <item>V60</item>
+    </string-array>
+
+    <string-array name="coffee_labels_array">
+        <item>TastyCoffee</item>
+        <item>SilkyDrum</item>
+        <item>Verle</item>
+        <item>Sibaristica</item>
+        <item>Delonghi</item>
+        <item>Millor</item>
+    </string-array>
+
 </resources>

@@ -8,7 +8,7 @@ data class CoffeeProductDbModel (
     @PrimaryKey(autoGenerate = true)
     val productId: Int,
     val name: String,
-    val region: String,
+    val region: String?,
     val imageUrl: String?
 )
 

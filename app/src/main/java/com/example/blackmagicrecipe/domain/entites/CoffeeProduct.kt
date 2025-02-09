@@ -1,8 +1,13 @@
 package com.example.blackmagicrecipe.domain.entites
 
 data class CoffeeProduct (
-    val productId: Int,
     val name:String,
-    val region: String,
-    val imageUrl: String?
-)
+    val region: String?,
+    val imageUrl: String?,
+    val productId: Int = UNDEFINED_ID
+){
+    companion object {
+
+        const val UNDEFINED_ID = 0
+    }
+}

@@ -26,7 +26,7 @@ abstract class RecipeDataBase : RoomDatabase() {
                 val db = Room.databaseBuilder(
                     application,
                     RecipeDataBase::class.java,
-                    "shop_item.db"
+                    "recipes.db"
                 )
                     .allowMainThreadQueries()
                     .build()
