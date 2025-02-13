@@ -39,9 +39,7 @@ class RecipesAdapter() :
             textViewBrewingMethod.text = recipe.brewingType.toString()
             textViewCoffeeLabel.text = recipe.coffeeProduct?.name.toString()
             textViewOverallRating.text = recipe.evaluation.overallRating.toString()
-            if (recipe.brewingType == BrewingType.EspressoMachine) {
-                imageViewBrewingType.setImageResource(R.drawable.icon_brewing_type_coffee_machine_espresso)
-            }
+            imageViewBrewingType.setImageResource(recipe.brewingType.iconResourceId)
         }
     }
 }

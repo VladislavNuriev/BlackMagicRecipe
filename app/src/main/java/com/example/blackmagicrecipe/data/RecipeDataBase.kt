@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.blackmagicrecipe.data.models.RecipeDbModel
 
-@Database(entities = [RecipeDbModel::class], version = 1, exportSchema = false)
+@Database(entities = [RecipeDbModel::class], version = 2, exportSchema = false)
 abstract class RecipeDataBase : RoomDatabase() {
 
     abstract fun shopListDao(): RecipeDao
@@ -29,6 +29,7 @@ abstract class RecipeDataBase : RoomDatabase() {
                     "recipes.db"
                 )
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = db
                 return db

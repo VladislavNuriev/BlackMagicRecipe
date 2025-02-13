@@ -36,7 +36,6 @@ class BrewingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         saveRecipe()
-
     }
 
     companion object {
@@ -46,12 +45,10 @@ class BrewingFragment : Fragment() {
 
     private fun saveRecipe() {
         binding.saveBlackMagic.setOnClickListener {
-            val brewingTypeString = binding.spinnerBrewingType.selectedItem.toString()
-            val brewingType = when (brewingTypeString) {
-                "V60" -> BrewingType.V60
-                "Espresso Machine" -> BrewingType.EspressoMachine
-                else -> null
-            }
+            val brewingType = BrewingType.valueOf(binding.spinnerBrewingType.selectedItem
+                .toString()
+                .filterNot { it.isWhitespace() }
+            )
             val coffeeNameString = binding.spinnerCoffeeName.selectedItem.toString()
             val coffeeProduct = CoffeeProduct(coffeeNameString, "Kenya", "http")
             val time = 25

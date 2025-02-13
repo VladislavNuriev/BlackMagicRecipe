@@ -1,7 +1,6 @@
 package com.example.blackmagicrecipe.presentation.recipesListFragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,10 +31,7 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        viewModel.recipesList.observe(viewLifecycleOwner) {
-            Log.d(TAG, "onViewCreated: ${it.toString()}")
-            recipeListAdapter.submitList(it)
-        }
+        observeViewModel()
     }
 
     override fun onDestroyView() {
@@ -49,6 +45,11 @@ class RecipesListFragment : Fragment() {
         const val TAG = "RecipesListFragment"
     }
 
+    private fun observeViewModel() {
+        viewModel.recipesList.observe(viewLifecycleOwner) {
+            recipeListAdapter.submitList(it)
+        }
+    }
 
     private fun setupRecyclerView() {
         recipeListAdapter = RecipesAdapter()
