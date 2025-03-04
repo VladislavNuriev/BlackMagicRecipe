@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.blackmagicrecipe.R
 import com.example.blackmagicrecipe.databinding.ItemRvRecipeBinding
-import com.example.blackmagicrecipe.domain.entites.BrewingType
-import com.example.blackmagicrecipe.domain.entites.Recipe
+import com.example.blackmagicrecipe.domain.models.Recipe
+import com.example.blackmagicrecipe.presentation.converters.convertBrewingTypeToDrawableId
 
 class RecipesAdapter() :
     ListAdapter<Recipe, RecipesAdapter.RecipeViewHolder>(RecipeDiffCallBack()) {
@@ -37,9 +36,9 @@ class RecipesAdapter() :
         val recipe = getItem(position)
         with(recipeViewHolder.binding) {
             textViewBrewingMethod.text = recipe.brewingType.toString()
-            textViewCoffeeLabel.text = recipe.coffeeProduct?.name.toString()
+            textViewCoffeeLabel.text = recipe.coffeeProduct.name
             textViewOverallRating.text = recipe.evaluation.overallRating.toString()
-            imageViewBrewingType.setImageResource(recipe.brewingType.iconResourceId)
+            imageViewBrewingType.setImageResource(convertBrewingTypeToDrawableId(recipe.brewingType))
         }
     }
 }

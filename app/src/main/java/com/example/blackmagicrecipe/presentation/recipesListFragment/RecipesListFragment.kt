@@ -39,12 +39,6 @@ class RecipesListFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-        fun newInstance() = RecipesListFragment()
-        const val NAME = "RecipesListFragment"
-        const val TAG = "RecipesListFragment"
-    }
-
     private fun observeViewModel() {
         viewModel.recipesList.observe(viewLifecycleOwner) {
             recipeListAdapter.submitList(it)
@@ -55,5 +49,11 @@ class RecipesListFragment : Fragment() {
         recipeListAdapter = RecipesAdapter()
         val recyclerView: RecyclerView = binding.rvRecipeList
         recyclerView.adapter = recipeListAdapter
+    }
+
+    companion object {
+        fun newInstance() = RecipesListFragment()
+        const val NAME = "RecipesListFragment"
+        const val TAG = "RecipesListFragment"
     }
 }

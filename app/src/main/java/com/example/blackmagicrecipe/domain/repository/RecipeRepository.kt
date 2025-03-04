@@ -1,7 +1,7 @@
 package com.example.blackmagicrecipe.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.example.blackmagicrecipe.domain.entites.Recipe
+import com.example.blackmagicrecipe.domain.models.Recipe
 
 interface RecipeRepository {
     fun getRecipe(id: Int): Recipe

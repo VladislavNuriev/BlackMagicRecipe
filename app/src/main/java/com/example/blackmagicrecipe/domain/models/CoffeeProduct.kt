@@ -1,4 +1,4 @@
-package com.example.blackmagicrecipe.domain.entites
+package com.example.blackmagicrecipe.domain.models
 
 data class CoffeeProduct (
     val name:String,

@@ -1,21 +1,21 @@
-package com.example.blackmagicrecipe.data
+package com.example.blackmagicrecipe.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.blackmagicrecipe.data.models.RecipeDbModel
+import com.example.blackmagicrecipe.data.database.models.RecipeDbEntity
 
 @Dao
 interface RecipeDao {
 
     @Query("SELECT * FROM recipes")
-    fun getRecipesList() : LiveData<List<RecipeDbModel>>
+    fun getRecipesList() : LiveData<List<RecipeDbEntity>>
 
     @Query("SELECT * FROM recipes WHERE id == :recipeId LIMIT 1")
-    fun getRecipe(recipeId: Int) : RecipeDbModel
+    fun getRecipe(recipeId: Int) : RecipeDbEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecipe(recipe: RecipeDbModel)
+    suspend fun insertRecipe(recipe: RecipeDbEntity)
 }
