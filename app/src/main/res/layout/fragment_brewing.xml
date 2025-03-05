@@ -17,9 +17,9 @@
             android:id="@+id/text_view_brew_your_coffee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="@dimen/margin_padding_size_small"
             android:text="@string/brew_your_coffee_label"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
         <Spinner
             android:id="@+id/spinner_brewing_type"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/standard_touch_size"
             android:entries="@array/brew_methods_array"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,8 +37,8 @@
         <Spinner
             android:id="@+id/spinner_coffee_name"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
+            android:layout_height="@dimen/standard_touch_size"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
             android:entries="@array/coffee_labels_array"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,11 +49,11 @@
             android:id="@+id/text_view_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
             android:inputType="time"
-            android:padding="8dp"
+            android:padding="@dimen/margin_padding_size_small"
             android:text="00:00"
-            android:textSize="48sp"
+            android:textSize="@dimen/text_size_xxlarge"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,14 +62,13 @@
 
         <ImageView
             android:id="@+id/image_view_coffee_brewing"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/standard_touch_size"
+            android:layout_height="@dimen/standard_touch_size"
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/text_view_timer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinner_coffee_name"
+            app:layout_constraintTop_toTopOf="@id/text_view_timer"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_timer"
             app:srcCompat="@drawable/gif_icon_coffee_machine"
             tools:visibility="visible" />
 
@@ -77,11 +76,11 @@
             android:id="@+id/button_start_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
             android:backgroundTint="@color/material_dynamic_neutral_variant60"
             android:text="@string/start_timer"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_view_timer" />
@@ -90,10 +89,10 @@
             android:id="@+id/text_view_evaluate_your_cup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:padding="8dp"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:padding="@dimen/margin_padding_size_small"
             android:text="@string/evaluate_your_cup"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/acidity"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_view_evaluate_your_cup" />
 
@@ -125,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/body"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/slider_acidity" />
 
@@ -146,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sweetness"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/slider_body" />
 
@@ -167,7 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/overall_rating"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/slider_sweetness" />
 
@@ -190,7 +189,7 @@
             android:backgroundTint="@color/material_dynamic_neutral_variant60"
             android:text="@string/save_black_magic"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/slider_overall_rating" />
