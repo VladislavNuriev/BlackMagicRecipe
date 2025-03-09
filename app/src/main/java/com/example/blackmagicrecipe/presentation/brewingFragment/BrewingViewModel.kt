@@ -1,20 +1,18 @@
 package com.example.blackmagicrecipe.presentation.brewingFragment
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.blackmagicrecipe.data.RecipeRepositoryImpl
 import com.example.blackmagicrecipe.domain.models.BrewingType
 import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.domain.usecases.SaveRecipeUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BrewingViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = RecipeRepositoryImpl(application)
-
-    private val saveRecipeUseCase = SaveRecipeUseCase(repository)
+class BrewingViewModel @Inject constructor(
+    private val saveRecipeUseCase: SaveRecipeUseCase,
+) : ViewModel() {
 
     fun saveRecipe(
         brewingTypeString: String,

@@ -6,8 +6,9 @@ import com.example.blackmagicrecipe.data.database.models.RecipeDbEntity
 import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
+import javax.inject.Inject
 
-class Mapper {
+class Mapper @Inject constructor() {
 
     fun mapRecipeToDbEntity(recipe: Recipe): RecipeDbEntity =
         RecipeDbEntity(

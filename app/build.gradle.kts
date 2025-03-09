@@ -57,8 +57,13 @@ dependencies {
     kapt (libs.androidx.room.compiler) // Кодогенератор
     implementation (libs.androidx.room.ktx) // Дополнительно для Kotlin Coroutines, Kotlin Flows
 
+    //Coroutines dependencies
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    //Dagger2 dependencies
+    implementation (libs.dagger)
+    kapt (libs.dagger.compiler)
 }
