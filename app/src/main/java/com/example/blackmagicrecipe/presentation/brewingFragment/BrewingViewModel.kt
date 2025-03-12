@@ -9,6 +9,7 @@ import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.domain.usecases.SaveRecipeUseCase
+import com.example.blackmagicrecipe.presentation.converters.convertBrewingTimeStringToInt
 import kotlinx.coroutines.launch
 
 class BrewingViewModel(application: Application) : AndroidViewModel(application) {
@@ -17,23 +18,24 @@ class BrewingViewModel(application: Application) : AndroidViewModel(application)
     private val saveRecipeUseCase = SaveRecipeUseCase(repository)
 
     fun saveRecipe(
-        brewingTypeString: String,
-        coffeeNameString: String,
+        brewingTypeStr: String,
+        coffeeNameStr: String,
+        brewingTimeStr: String,
         acidity: Int,
         body: Int,
         sweetness: Int,
         rating: Int
     ) {
         val brewingType = BrewingType.valueOf(
-            brewingTypeString.filterNot { it.isWhitespace() }
+            brewingTypeStr.filterNot { it.isWhitespace() }
         )
-        val coffeeProduct = CoffeeProduct(coffeeNameString, "Kenya", "http")
-        val time = 25
+        val coffeeProduct = CoffeeProduct(coffeeNameStr, "Kenya", "http")
+        val brewingTime = convertBrewingTimeStringToInt(brewingTimeStr)
         val evaluation = CoffeeEvaluation(acidity, body, sweetness, rating)
         val newRecipe = Recipe(
             brewingType,
             coffeeProduct,
-            time,
+            brewingTime,
             evaluation
         )
         viewModelScope.launch {
