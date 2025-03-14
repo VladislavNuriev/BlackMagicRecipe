@@ -9,14 +9,17 @@ import androidx.fragment.app.viewModels
 import com.example.blackmagicrecipe.R
 import com.example.blackmagicrecipe.databinding.FragmentBrewingBinding
 import com.example.blackmagicrecipe.presentation.recipesListFragment.RecipesListFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BrewingFragment : Fragment() {
 
-    private val viewModel: BrewingViewModel by viewModels()
+    private val viewModel by viewModels<BrewingViewModel>()
 
     private var _binding: FragmentBrewingBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("binding (FragmentWelcomeBinding) is null")
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
