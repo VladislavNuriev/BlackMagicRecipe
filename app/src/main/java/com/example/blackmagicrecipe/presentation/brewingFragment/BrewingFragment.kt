@@ -1,41 +1,25 @@
 package com.example.blackmagicrecipe.presentation.brewingFragment
 
-import android.app.Application
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.blackmagicrecipe.R
 import com.example.blackmagicrecipe.databinding.FragmentBrewingBinding
-import com.example.blackmagicrecipe.di.ApplicationComponent
-import com.example.blackmagicrecipe.presentation.BlackMagicRecipeApp
-import com.example.blackmagicrecipe.presentation.ViewModelFactory
 import com.example.blackmagicrecipe.presentation.recipesListFragment.RecipesListFragment
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BrewingFragment : Fragment() {
 
-    private val component by lazy {
-        (requireActivity().application as BlackMagicRecipeApp).component
-    }
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var viewModel: BrewingViewModel
+    private val viewModel by viewModels<BrewingViewModel>()
 
     private var _binding: FragmentBrewingBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("binding (FragmentWelcomeBinding) is null")
 
-
-    override fun onAttach(context: Context) {
-        component.inject(this   )
-        super.onAttach(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +32,6 @@ class BrewingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory)[BrewingViewModel::class.java]
         setOnClickListeners()
     }
 

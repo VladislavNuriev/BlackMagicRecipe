@@ -7,7 +7,9 @@ import com.example.blackmagicrecipe.data.database.RecipeDao
 import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.domain.repository.RecipeRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RecipeRepositoryImpl @Inject constructor(
     application: Application,
     private val recipeDao: RecipeDao,

@@ -7,9 +7,11 @@ import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.domain.usecases.SaveRecipeUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class BrewingViewModel @Inject constructor(
     private val saveRecipeUseCase: SaveRecipeUseCase,
 ) : ViewModel() {
