@@ -9,10 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.blackmagicrecipe.databinding.FragmentRecipesListBinding
 import com.example.blackmagicrecipe.presentation.recipesListFragment.adapters.RecipesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipesListFragment : Fragment() {
 
-    private val viewModel: RecipesListViewModel by viewModels()
+    private val viewModel by viewModels<RecipesListViewModel>()
 
     private var _binding: FragmentRecipesListBinding? = null
     private val binding

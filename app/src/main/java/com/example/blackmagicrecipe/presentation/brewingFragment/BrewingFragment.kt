@@ -1,7 +1,6 @@
 package com.example.blackmagicrecipe.presentation.brewingFragment
 
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -12,18 +11,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.DrawableImageViewTarget
-import com.bumptech.glide.request.target.Target
+import com.example.blackmagicrecipe.R
 import com.example.blackmagicrecipe.databinding.FragmentBrewingBinding
 import com.example.blackmagicrecipe.presentation.recipesListFragment.RecipesListFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class BrewingFragment : Fragment() {
 
-    private val viewModel: BrewingViewModel by viewModels()
+    private val viewModel by viewModels<BrewingViewModel>()
 
     private var _binding: FragmentBrewingBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("binding (FragmentWelcomeBinding) is null")
+
 
     private var isTimerActive = false
 
@@ -98,8 +100,8 @@ class BrewingFragment : Fragment() {
             binding.imageViewCoffeeBrewing.visibility = View.VISIBLE
             val imageViewTarget = DrawableImageViewTarget(binding.imageViewCoffeeBrewing)
             Glide.with(this)
-                .load(com.example.blackmagicrecipe.R.drawable.gif_icon_coffee_machine)
-                .into<Target<Drawable>>(imageViewTarget)
+                .load(R.drawable.gif_icon_coffee_machine)
+                .into(imageViewTarget)
         } else {
             binding.imageViewCoffeeBrewing.visibility = View.GONE
         }
@@ -108,7 +110,7 @@ class BrewingFragment : Fragment() {
 
     private fun launchRecipesListFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(com.example.blackmagicrecipe.R.id.main_container, RecipesListFragment.newInstance())
+            .replace(R.id.main_container, RecipesListFragment.newInstance())
             .addToBackStack(RecipesListFragment.NAME)
             .commit()
     }

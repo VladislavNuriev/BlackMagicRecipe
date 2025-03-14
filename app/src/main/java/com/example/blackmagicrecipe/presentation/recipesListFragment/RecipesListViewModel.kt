@@ -1,14 +1,14 @@
 package com.example.blackmagicrecipe.presentation.recipesListFragment
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.example.blackmagicrecipe.data.RecipeRepositoryImpl
+import androidx.lifecycle.ViewModel
 import com.example.blackmagicrecipe.domain.usecases.GetRecipeListUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = RecipeRepositoryImpl(application)
-
-    private val getRecipeListUseCase = GetRecipeListUseCase(repository)
+@HiltViewModel
+class RecipesListViewModel @Inject constructor(
+    private val getRecipeListUseCase: GetRecipeListUseCase
+) : ViewModel() {
 
     val recipesList = getRecipeListUseCase.invoke()
 }
