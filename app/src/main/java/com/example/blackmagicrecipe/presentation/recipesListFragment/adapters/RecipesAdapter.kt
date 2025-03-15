@@ -35,9 +35,7 @@ class RecipesAdapter() :
         // contents of the view with that element
         val recipe = getItem(position)
         with(recipeViewHolder.binding) {
-            textViewBrewingMethod.text = recipe.brewingType.toString()
-                .split(Regex("(?=\\p{Upper})")) // Separates BrewingType name (MochaPot -> Mocha Pot)
-                .joinToString (separator = " ")
+            textViewBrewingMethod.text = recipe.brewingType.stringName
             textViewCoffeeLabel.text = recipe.coffeeProduct.name
             textViewOverallRating.text = recipe.evaluation.overallRating.toString()
             imageViewBrewingType.setImageResource(convertBrewingTypeToDrawableId(recipe.brewingType))

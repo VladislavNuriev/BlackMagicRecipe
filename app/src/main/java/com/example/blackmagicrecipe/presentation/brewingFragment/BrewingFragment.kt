@@ -3,7 +3,6 @@ package com.example.blackmagicrecipe.presentation.brewingFragment
 
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +26,6 @@ class BrewingFragment : Fragment() {
         get() = _binding ?: throw IllegalStateException("binding (FragmentWelcomeBinding) is null")
 
 
-    private var isTimerActive = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +38,7 @@ class BrewingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
+        observeTimerState()
     }
 
 
@@ -58,8 +56,7 @@ class BrewingFragment : Fragment() {
         }
 
         binding.buttonTimer.setOnClickListener {
-            setUpTimer()
-            setUpBrewingGif()
+            viewModel.toggleTimer()
         }
     }
 
@@ -75,27 +72,33 @@ class BrewingFragment : Fragment() {
         viewModel.saveRecipe(brewingType, coffeeNameString, timerString, acidity, body, sweetness, rating)
     }
 
-
-    private fun setUpTimer() {
-        if (!isTimerActive) {
-            binding.chronometer.apply {
-                base = SystemClock.elapsedRealtime()
-                start()
-                isTimerActive = true
-                setOnChronometerTickListener {
-                    Log.d(TAG, it.text.toString())
-                }
+    private fun observeTimerState() {
+        viewModel.isTimerActive.observe(viewLifecycleOwner) {
+            if (it) {
+                startTimer()
+            } else {
+                stopTimer()
             }
-            binding.buttonTimer.text = getString(com.example.blackmagicrecipe.R.string.stop_timer)
-        } else {
-            isTimerActive = false
-            binding.chronometer.stop()
-            binding.buttonTimer.text = getString(com.example.blackmagicrecipe.R.string.reset_and_start)
+            setupBrewingGif(it)
         }
     }
 
+    private fun startTimer() {
+        binding.chronometer.apply {
+            base = SystemClock.elapsedRealtime()
+            start()
+        }
+        binding.buttonTimer.text = getString(R.string.stop_timer)
+    }
 
-    private fun setUpBrewingGif() {
+
+    private fun stopTimer() {
+        binding.chronometer.stop()
+        binding.buttonTimer.text = getString(R.string.reset_and_start)
+    }
+
+
+    private fun setupBrewingGif(isTimerActive: Boolean) {
         if (isTimerActive) {
             binding.imageViewCoffeeBrewing.visibility = View.VISIBLE
             val imageViewTarget = DrawableImageViewTarget(binding.imageViewCoffeeBrewing)
