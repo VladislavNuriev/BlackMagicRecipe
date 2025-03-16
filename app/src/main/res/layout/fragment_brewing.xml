@@ -45,14 +45,13 @@
             app:layout_constraintTop_toBottomOf="@+id/spinner_brewing_type" />
 
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_view_timer"
+        <Chronometer
+            android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_padding_size_small"
             android:inputType="time"
             android:padding="@dimen/margin_padding_size_small"
-            android:text="00:00"
             android:textSize="@dimen/text_size_xxlarge"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,15 +64,15 @@
             android:layout_width="@dimen/standard_touch_size"
             android:layout_height="@dimen/standard_touch_size"
             android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@id/text_view_timer"
+            app:layout_constraintEnd_toStartOf="@id/chronometer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/text_view_timer"
-            app:layout_constraintBottom_toBottomOf="@+id/text_view_timer"
+            app:layout_constraintTop_toTopOf="@id/chronometer"
+            app:layout_constraintBottom_toBottomOf="@+id/chronometer"
             app:srcCompat="@drawable/gif_icon_coffee_machine"
             tools:visibility="visible" />
 
         <Button
-            android:id="@+id/button_start_timer"
+            android:id="@+id/button_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_padding_size_medium"
@@ -83,7 +82,7 @@
             android:textSize="@dimen/text_size_large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_view_timer" />
+            app:layout_constraintTop_toBottomOf="@id/chronometer" />
 
         <TextView
             android:id="@+id/text_view_evaluate_your_cup"
@@ -96,7 +95,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_start_timer" />
+            app:layout_constraintTop_toBottomOf="@id/button_timer" />
 
         <TextView
             android:id="@+id/text_view_acidity"

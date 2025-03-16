@@ -68,12 +68,15 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
-    //Dagger2 dependencies
-    implementation (libs.dagger)
-    kapt (libs.dagger.compiler)
+//    //Dagger2 dependencies
+//    implementation (libs.dagger)
+//    kapt (libs.dagger.compiler)
+
 
     //Hilt dependencies
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+
+    implementation (libs.glide)
 }

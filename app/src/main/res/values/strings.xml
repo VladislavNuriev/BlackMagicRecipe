@@ -29,5 +29,7 @@
     <string name="body">Body</string>
     <string name="sweetness">Sweetness</string>
     <string name="overall_rating">Overall Rating</string>
+    <string name="stop_timer">Stop timer</string>
+    <string name="reset_and_start">Reset and start</string>
 
 </resources>

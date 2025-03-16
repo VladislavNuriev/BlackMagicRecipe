@@ -12,7 +12,7 @@ data class RecipeDbEntity (
     val brewingType: BrewingType,
     @Embedded
     val coffeeProduct: CoffeeProductDbEntity,
-    val brewingTime: Int?,
+    val brewingTime: Int,
     @Embedded
     val evaluation: CoffeeEvaluationDbModel
 )
