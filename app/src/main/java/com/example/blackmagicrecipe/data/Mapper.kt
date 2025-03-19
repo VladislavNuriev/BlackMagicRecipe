@@ -3,6 +3,7 @@ package com.example.blackmagicrecipe.data
 import com.example.blackmagicrecipe.data.database.models.CoffeeEvaluationDbModel
 import com.example.blackmagicrecipe.data.database.models.CoffeeProductDbEntity
 import com.example.blackmagicrecipe.data.database.models.RecipeDbEntity
+import com.example.blackmagicrecipe.data.network.CoffeeProductDto
 import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
@@ -25,6 +26,10 @@ class Mapper @Inject constructor() {
             productId = coffeeProduct.productId,
             name = coffeeProduct.name,
             region = coffeeProduct.region,
+            recommendedBrewingType = coffeeProduct.brewingType,
+            description = coffeeProduct.description,
+            evaluation = coffeeProduct.evaluation,
+            price = coffeeProduct.price,
             imageUrl = coffeeProduct.imageUrl
         )
 
@@ -51,6 +56,10 @@ class Mapper @Inject constructor() {
         productId = coffeeProductDb.productId,
         name = coffeeProductDb.name,
         region = coffeeProductDb.region,
+        brewingType = coffeeProductDb.recommendedBrewingType,
+        description = coffeeProductDb.description,
+        evaluation = coffeeProductDb.evaluation,
+        price = coffeeProductDb.price,
         imageUrl = coffeeProductDb.imageUrl
     )
 
@@ -62,6 +71,23 @@ class Mapper @Inject constructor() {
         sweetness = coffeeEvaluationDb.sweetness,
         overallRating = coffeeEvaluationDb.overallRating
     )
+
+    private fun mapCoffeeProductDtoToDbEntity(
+        coffeeProductDto: CoffeeProductDto
+    ): CoffeeProductDbEntity = CoffeeProductDbEntity(
+        productId = coffeeProductDto.id.toInt(),
+        name = coffeeProductDto.name,
+        region = coffeeProductDto.region,
+        recommendedBrewingType = coffeeProductDto.brewingType,
+        description = coffeeProductDto.description,
+        evaluation = coffeeProductDto.evaluation,
+        price = coffeeProductDto.price,
+        imageUrl = coffeeProductDto.img
+    )
+
+    fun mapCoffeeProductDtoListToDbEntityList(
+        dtoList: List<CoffeeProductDto>
+    ): List<CoffeeProductDbEntity> = dtoList.map(::mapCoffeeProductDtoToDbEntity)
 
     fun mapRecipeDbEntityListToRecipeList(recipeDbList: List<RecipeDbEntity>): List<Recipe> =
         recipeDbList.map(::mapRecipeDbEntityToRecipe)

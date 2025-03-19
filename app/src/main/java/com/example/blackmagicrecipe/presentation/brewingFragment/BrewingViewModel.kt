@@ -8,6 +8,7 @@ import com.example.blackmagicrecipe.domain.models.BrewingType
 import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
+import com.example.blackmagicrecipe.domain.usecases.LoadCoffeeProductsUseCase
 import com.example.blackmagicrecipe.domain.usecases.SaveRecipeUseCase
 import com.example.blackmagicrecipe.presentation.mappers.BrewingTimeUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,13 +18,19 @@ import javax.inject.Inject
 @HiltViewModel
 class BrewingViewModel @Inject constructor(
     private val saveRecipeUseCase: SaveRecipeUseCase,
-    private val brewingTimeUiMapper: BrewingTimeUiMapper
+    private val brewingTimeUiMapper: BrewingTimeUiMapper,
+    private val loadCoffeeProductsUseCase: LoadCoffeeProductsUseCase
 ) : ViewModel() {
 
     private val _isTimerActive = MutableLiveData<Boolean>()
     val isTimerActive: LiveData<Boolean>
         get() = _isTimerActive
 
+    init {
+        viewModelScope.launch {
+            loadCoffeeProductsUseCase()
+        }
+    }
 
     fun toggleTimer() {
         _isTimerActive.value = _isTimerActive.value != true
@@ -41,7 +48,10 @@ class BrewingViewModel @Inject constructor(
         val brewingType = BrewingType.valueOf(
             brewingTypeStr.filterNot { it.isWhitespace() }
         )
-        val coffeeProduct = CoffeeProduct(coffeeNameStr, "Kenya", "http")
+        val coffeeProduct = CoffeeProduct(
+            coffeeNameStr, "Kenya", "V60",
+            "Sweet", "88", "100", "hhttpp"
+        )
         val brewingTime = brewingTimeUiMapper.convertBrewingTimeStringToInt(brewingTimeStr)
         val evaluation = CoffeeEvaluation(acidity, body, sweetness, rating)
         val newRecipe = Recipe(

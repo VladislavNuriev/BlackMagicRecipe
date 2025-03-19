@@ -4,6 +4,8 @@ import android.app.Application
 import com.example.blackmagicrecipe.data.RecipeRepositoryImpl
 import com.example.blackmagicrecipe.data.database.RecipeDao
 import com.example.blackmagicrecipe.data.database.RecipeDataBase
+import com.example.blackmagicrecipe.data.network.CoffeeProductApiFactory
+import com.example.blackmagicrecipe.data.network.CoffeeProductApiService
 import com.example.blackmagicrecipe.domain.repository.RecipeRepository
 import dagger.Binds
 import dagger.Module
@@ -25,7 +27,13 @@ interface ApplicationModule {
         @Provides
         @Singleton
         fun provideRecipeDao(application: Application): RecipeDao {
-            return RecipeDataBase.getInstance(application).shopListDao()
+            return RecipeDataBase.getInstance(application).recipeDao()
+        }
+
+        @Provides
+        @Singleton
+        fun provideCoffeeProductApiService() : CoffeeProductApiService {
+            return CoffeeProductApiFactory.apiService
         }
     }
 }
