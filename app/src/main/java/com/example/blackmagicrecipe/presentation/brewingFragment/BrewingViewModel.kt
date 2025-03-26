@@ -12,6 +12,7 @@ import com.example.blackmagicrecipe.domain.usecases.LoadCoffeeProductsUseCase
 import com.example.blackmagicrecipe.domain.usecases.SaveRecipeUseCase
 import com.example.blackmagicrecipe.presentation.mappers.BrewingTimeUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,17 +20,20 @@ import javax.inject.Inject
 class BrewingViewModel @Inject constructor(
     private val saveRecipeUseCase: SaveRecipeUseCase,
     private val brewingTimeUiMapper: BrewingTimeUiMapper,
-    private val loadCoffeeProductsUseCase: LoadCoffeeProductsUseCase
+    private val loadCoffeeProducts: LoadCoffeeProductsUseCase
 ) : ViewModel() {
 
     private val _isTimerActive = MutableLiveData<Boolean>()
     val isTimerActive: LiveData<Boolean>
         get() = _isTimerActive
 
+    private val _loadingStatus = MutableLiveData<String>()
+    val loadingStatus: LiveData<String>
+        get() = _loadingStatus
+
+
     init {
-        viewModelScope.launch {
-            loadCoffeeProductsUseCase()
-        }
+        loadCoffeeProductsSafely()
     }
 
     fun toggleTimer() {
@@ -63,5 +67,23 @@ class BrewingViewModel @Inject constructor(
         viewModelScope.launch {
             saveRecipeUseCase.invoke(newRecipe)
         }
+    }
+
+    private fun loadCoffeeProductsSafely() {
+        _loadingStatus.value = "Loading"
+        viewModelScope.launch {
+            while (_loadingStatus.value != "Success") {
+                loadCoffeeProducts()
+                    .onSuccess { _loadingStatus.value = "Success" }
+                    .onFailure {
+                        _loadingStatus.value = it.toString()
+                        delay(5000)
+                    }
+            }
+        }
+    }
+
+    companion object {
+        const val TAG = "BrewingViewModel"
     }
 }
