@@ -3,6 +3,8 @@ package com.example.blackmagicrecipe.presentation.brewingFragment
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.example.blackmagicrecipe.R
 import com.example.blackmagicrecipe.databinding.FragmentBrewingBinding
+import com.example.blackmagicrecipe.presentation.brewingFragment.adapters.SearchProductAdapter1
 import com.example.blackmagicrecipe.presentation.recipesListFragment.RecipesListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +28,7 @@ class BrewingFragment : Fragment() {
     private val binding
         get() = _binding ?: throw IllegalStateException("binding (FragmentWelcomeBinding) is null")
 
+    private lateinit var adapter: SearchProductAdapter1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +43,31 @@ class BrewingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
         observeTimerState()
+
+        // Observe database changes
+        viewModel.coffeeProductList.observe(viewLifecycleOwner) { items ->
+            adapter = SearchProductAdapter1(requireContext(), items)
+            // Setup AutoCompleteTextView
+            binding.textViewCoffeeName.setAdapter(adapter)
+            binding.textViewCoffeeName.threshold = 2
+        }
+
+        // Text changes listener
+        binding.textViewCoffeeName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                adapter.filter.filter(s)
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        // Item selection
+//        adapter.onProductClickListener = object : SearchProductAdapter.OnProductClickListener {
+//            override fun onProductClick(product: CoffeeProduct) {
+//                val productName = product.name
+//                binding.textViewCoffeeName.setText(productName)
+//            }
+//        }
     }
 
 
@@ -63,7 +92,7 @@ class BrewingFragment : Fragment() {
 
     private fun fetchValuesFromViews() {
         val brewingType = binding.spinnerBrewingType.selectedItem.toString()
-        val coffeeNameString = binding.spinnerCoffeeName.selectedItem.toString()
+        val coffeeNameString = binding.textViewCoffeeName.text.toString()
         val timerString = binding.chronometer.text.toString()
         val acidity = binding.sliderAcidity.value.toInt()
         val body = binding.sliderBody.value.toInt()

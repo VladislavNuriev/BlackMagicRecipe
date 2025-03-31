@@ -31,5 +31,6 @@
     <string name="overall_rating">Overall Rating</string>
     <string name="stop_timer">Stop timer</string>
     <string name="reset_and_start">Reset and start</string>
+    <string name="begin_typing_coffee_name">Begin typing coffee name</string>
 
 </resources>

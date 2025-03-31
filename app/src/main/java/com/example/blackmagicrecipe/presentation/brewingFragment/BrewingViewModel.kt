@@ -24,6 +24,16 @@ class BrewingViewModel @Inject constructor(
     val isTimerActive: LiveData<Boolean>
         get() = _isTimerActive
 
+    private val _coffeeProductList = MutableLiveData<List<CoffeeProduct>>()
+    val coffeeProductList: LiveData<List<CoffeeProduct>>
+        get() = _coffeeProductList
+
+    init {
+        val coffeeProduct = CoffeeProduct("Tasty", "kenya", "sdfs")
+        val coffeeProduct1 = CoffeeProduct("Verle", "Ethiopia,", "http")
+        _coffeeProductList.value = ArrayList<CoffeeProduct>(listOf(coffeeProduct1, coffeeProduct))
+    }
+
 
     fun toggleTimer() {
         _isTimerActive.value = _isTimerActive.value != true
