@@ -70,11 +70,11 @@ class BrewingViewModel @Inject constructor(
     }
 
     private fun loadCoffeeProductsSafely() {
-        _loadingStatus.value = "Loading"
+        _loadingStatus.value = LOADING
         viewModelScope.launch {
-            while (_loadingStatus.value != "Success") {
+            while (_loadingStatus.value != SUCCESS) {
                 loadCoffeeProducts()
-                    .onSuccess { _loadingStatus.value = "Success" }
+                    .onSuccess { _loadingStatus.value = SUCCESS }
                     .onFailure {
                         _loadingStatus.value = it.toString()
                         delay(5000)
@@ -84,6 +84,7 @@ class BrewingViewModel @Inject constructor(
     }
 
     companion object {
-        const val TAG = "BrewingViewModel"
+        const val LOADING = "Loading"
+        const val SUCCESS = "Success"
     }
 }

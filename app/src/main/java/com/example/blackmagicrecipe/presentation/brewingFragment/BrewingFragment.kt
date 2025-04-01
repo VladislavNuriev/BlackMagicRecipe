@@ -76,7 +76,7 @@ class BrewingFragment : Fragment() {
 
     private fun observeFailures() {
         viewModel.loadingStatus.observe(viewLifecycleOwner) {
-            if ((it != "Loading") and (it != "Success")) {
+            if ((it != LOADING) and (it != SUCCESS)) {
                 Toast.makeText(requireActivity(), it.toString(), Toast.LENGTH_LONG).show()
             }
         }
@@ -131,6 +131,7 @@ class BrewingFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = BrewingFragment()
-        private const val TAG = "BrewingFragment"
+        const val LOADING = "Loading"
+        const val SUCCESS = "Success"
     }
 }
