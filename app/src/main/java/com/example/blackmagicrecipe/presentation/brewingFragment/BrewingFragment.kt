@@ -6,6 +6,7 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -39,6 +40,7 @@ class BrewingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
         observeTimerState()
+        observeFailures()
     }
 
 
@@ -70,6 +72,14 @@ class BrewingFragment : Fragment() {
         val sweetness = binding.sliderSweetness.value.toInt()
         val rating = binding.sliderOverallRating.value.toInt()
         viewModel.saveRecipe(brewingType, coffeeNameString, timerString, acidity, body, sweetness, rating)
+    }
+
+    private fun observeFailures() {
+        viewModel.loadingStatus.observe(viewLifecycleOwner) {
+            if ((it != LOADING) and (it != SUCCESS)) {
+                Toast.makeText(requireActivity(), it.toString(), Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun observeTimerState() {
@@ -121,6 +131,7 @@ class BrewingFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = BrewingFragment()
-        private const val TAG = "BrewingFragment"
+        const val LOADING = "Loading"
+        const val SUCCESS = "Success"
     }
 }

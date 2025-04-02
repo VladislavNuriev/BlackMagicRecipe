@@ -79,4 +79,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation (libs.glide)
+
+    implementation(libs.retrofit)
+    implementation (libs.converter.gson)
 }
