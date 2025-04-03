@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.blackmagicrecipe.data.database.models.CoffeeProductDbEntity
 import com.example.blackmagicrecipe.data.database.models.RecipeDbEntity
 
 @Dao
@@ -16,6 +17,9 @@ interface RecipeDao {
     @Query("SELECT * FROM recipes WHERE id == :recipeId LIMIT 1")
     fun getRecipe(recipeId: Int) : RecipeDbEntity
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(entity = RecipeDbEntity::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipe(recipe: RecipeDbEntity)
+
+    @Insert(entity = CoffeeProductDbEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCoffeeProductList(product: List<CoffeeProductDbEntity>)
 }

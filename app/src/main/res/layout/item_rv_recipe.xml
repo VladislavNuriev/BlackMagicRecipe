@@ -29,7 +29,7 @@
             android:id="@+id/text_view_brewing_method"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_padding_size_small"
+            android:layout_marginStart="@dimen/margin_padding_size_xsmall"
             android:padding="@dimen/margin_padding_size_small"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_medium"
@@ -41,12 +41,12 @@
             android:id="@+id/text_view_coffee_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_padding_size_small"
+            android:layout_marginEnd="@dimen/margin_padding_size_xsmall"
             android:padding="@dimen/margin_padding_size_small"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_medium"
             app:layout_constraintEnd_toStartOf="@id/image_view_coffee_label"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/image_view_coffee_label"
             tools:text="TastyCoffee" />
 
         <ImageView
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_padding_size_small"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/text_view_rating_label"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Date: 14.02.24 18:56" />
 
 

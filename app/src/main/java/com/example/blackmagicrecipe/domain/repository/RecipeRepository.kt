@@ -7,4 +7,5 @@ interface RecipeRepository {
     fun getRecipe(id: Int): Recipe
     fun getRecipesList(): LiveData<List<Recipe>>
     suspend fun saveRecipe(recipe: Recipe)
+    suspend fun loadCoffeeProducts(): Result<Unit>
 }

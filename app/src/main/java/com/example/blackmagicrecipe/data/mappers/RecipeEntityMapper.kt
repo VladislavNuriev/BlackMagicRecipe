@@ -1,32 +1,22 @@
-package com.example.blackmagicrecipe.data
+package com.example.blackmagicrecipe.data.mappers
 
 import com.example.blackmagicrecipe.data.database.models.CoffeeEvaluationDbModel
-import com.example.blackmagicrecipe.data.database.models.CoffeeProductDbEntity
 import com.example.blackmagicrecipe.data.database.models.RecipeDbEntity
 import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
-import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
 import javax.inject.Inject
 
-class Mapper @Inject constructor() {
+class RecipeEntityMapper @Inject constructor(private val coffeeProductEntityMapper: CoffeeProductEntityMapper) {
 
     fun mapRecipeToDbEntity(recipe: Recipe): RecipeDbEntity =
         RecipeDbEntity(
             id = recipe.recipeId,
             brewingType = recipe.brewingType,
-            coffeeProduct = mapCoffeeProductToDbEntity(recipe.coffeeProduct),
+            coffeeProduct = coffeeProductEntityMapper.mapCoffeeProductToDbEntity(recipe.coffeeProduct),
             brewingTime = recipe.brewingTime,
             evaluation = mapCoffeeEvaluationToDbModel(recipe.evaluation)
         )
 
-
-    private fun mapCoffeeProductToDbEntity(coffeeProduct: CoffeeProduct): CoffeeProductDbEntity =
-        CoffeeProductDbEntity(
-            productId = coffeeProduct.productId,
-            name = coffeeProduct.name,
-            region = coffeeProduct.region,
-            imageUrl = coffeeProduct.imageUrl
-        )
 
     private fun mapCoffeeEvaluationToDbModel(coffeeEvaluation: CoffeeEvaluation):
             CoffeeEvaluationDbModel = CoffeeEvaluationDbModel(
@@ -40,19 +30,11 @@ class Mapper @Inject constructor() {
         Recipe(
             recipeId = recipeDb.id,
             brewingType = recipeDb.brewingType,
-            coffeeProduct = mapCoffeeProductDbEntityToCoffeeProduct(recipeDb.coffeeProduct),
+            coffeeProduct = coffeeProductEntityMapper.mapCoffeeProductDbEntityToCoffeeProduct(recipeDb.coffeeProduct),
             brewingTime = recipeDb.brewingTime,
             evaluation = mapCoffeeEvaluationDbModelToCoffeeEvaluation(recipeDb.evaluation)
         )
 
-
-    private fun mapCoffeeProductDbEntityToCoffeeProduct(coffeeProductDb: CoffeeProductDbEntity):
-            CoffeeProduct = CoffeeProduct(
-        productId = coffeeProductDb.productId,
-        name = coffeeProductDb.name,
-        region = coffeeProductDb.region,
-        imageUrl = coffeeProductDb.imageUrl
-    )
 
     private fun mapCoffeeEvaluationDbModelToCoffeeEvaluation(
         coffeeEvaluationDb: CoffeeEvaluationDbModel
@@ -62,6 +44,7 @@ class Mapper @Inject constructor() {
         sweetness = coffeeEvaluationDb.sweetness,
         overallRating = coffeeEvaluationDb.overallRating
     )
+
 
     fun mapRecipeDbEntityListToRecipeList(recipeDbList: List<RecipeDbEntity>): List<Recipe> =
         recipeDbList.map(::mapRecipeDbEntityToRecipe)
