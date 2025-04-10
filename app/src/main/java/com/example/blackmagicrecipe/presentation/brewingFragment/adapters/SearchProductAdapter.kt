@@ -1,46 +1,40 @@
 package com.example.blackmagicrecipe.presentation.brewingFragment.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.TextView
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
+import javax.inject.Inject
 
-class SearchProductAdapter1(
+class SearchProductAdapter @Inject constructor(
     context: Context,
-    private val allProducts: List<CoffeeProduct>
-) : ArrayAdapter<CoffeeProduct>(context, android.R.layout.simple_dropdown_item_1line, allProducts) {
+    var productList: List<CoffeeProduct> = mutableListOf()
+) : ArrayAdapter<CoffeeProduct>(context, android.R.layout.simple_dropdown_item_1line, productList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent) as TextView
-        view.text = allProducts[position].name
+        view.text = productList[position].name
         return view
     }
 
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val filteredList = if (constraint.isNullOrEmpty()) {
-                    allProducts
-                } else {
-                    allProducts.filter {
-                        it.name.contains(constraint, ignoreCase = true)
-                    }
-                }
+                val results = FilterResults()
                 return FilterResults().apply {
-                    values = filteredList
-                    count = filteredList.size
+                    results.values = productList
+                    results.count = productList.size
+                    Log.d("testing", "performFiltering: productList $productList ")
                 }
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 if ((results?.count ?: 0) > 0) {
-                    val filteredList = results?.values as MutableList<CoffeeProduct>
-                    clear()
-                    addAll(filteredList)
-                    notifyDataSetChanged()
+                    productList = results?.values as List<CoffeeProduct>
                 } else {
                     notifyDataSetInvalidated()
                 }
