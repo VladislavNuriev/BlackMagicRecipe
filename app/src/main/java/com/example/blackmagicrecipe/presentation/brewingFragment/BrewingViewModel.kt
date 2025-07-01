@@ -8,11 +8,18 @@ import com.example.blackmagicrecipe.domain.models.BrewingType
 import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
+import com.example.blackmagicrecipe.domain.usecases.GetProductsBySymbolsUseCase
 import com.example.blackmagicrecipe.domain.usecases.LoadCoffeeProductsUseCase
 import com.example.blackmagicrecipe.domain.usecases.SaveRecipeUseCase
 import com.example.blackmagicrecipe.presentation.mappers.BrewingTimeUiMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +27,8 @@ import javax.inject.Inject
 class BrewingViewModel @Inject constructor(
     private val saveRecipeUseCase: SaveRecipeUseCase,
     private val brewingTimeUiMapper: BrewingTimeUiMapper,
-    private val loadCoffeeProducts: LoadCoffeeProductsUseCase
+    private val loadCoffeeProducts: LoadCoffeeProductsUseCase,
+    private val getProductsBySymbols: GetProductsBySymbolsUseCase
 ) : ViewModel() {
 
     private val _isTimerActive = MutableLiveData<Boolean>()
@@ -31,10 +39,18 @@ class BrewingViewModel @Inject constructor(
     val loadingStatus: LiveData<String>
         get() = _loadingStatus
 
+    private val _coffeeProductList = MutableLiveData<List<CoffeeProduct>>()
+    val coffeeProductList: LiveData<List<CoffeeProduct>>
+        get() = _coffeeProductList
+
+    private val _searchFlow = MutableStateFlow("")
+
 
     init {
         loadCoffeeProductsSafely()
+        setUpSearchFlow()
     }
+
 
     fun toggleTimer() {
         _isTimerActive.value = _isTimerActive.value != true
@@ -74,13 +90,36 @@ class BrewingViewModel @Inject constructor(
         viewModelScope.launch {
             while (_loadingStatus.value != SUCCESS) {
                 loadCoffeeProducts()
-                    .onSuccess { _loadingStatus.value = SUCCESS }
+                    .onSuccess {
+                        _loadingStatus.value = SUCCESS
+                    }
                     .onFailure {
                         _loadingStatus.value = it.toString()
                         delay(5000)
                     }
             }
         }
+    }
+
+    private fun getProductList(query: String) {
+        viewModelScope.launch {
+            _coffeeProductList.value = getProductsBySymbols(query)
+        }
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        _searchFlow.value = query
+    }
+
+    private fun setUpSearchFlow() {
+        _searchFlow
+            .debounce(500)
+            .filter { it.length >= 2 }
+            .distinctUntilChanged()
+            .onEach { query ->
+                getProductList(query)
+            }
+            .launchIn(viewModelScope)
     }
 
     companion object {

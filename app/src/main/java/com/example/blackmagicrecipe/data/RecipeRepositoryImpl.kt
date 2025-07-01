@@ -1,11 +1,13 @@
 package com.example.blackmagicrecipe.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.blackmagicrecipe.data.database.RecipeDao
 import com.example.blackmagicrecipe.data.mappers.CoffeeProductEntityMapper
 import com.example.blackmagicrecipe.data.mappers.RecipeEntityMapper
 import com.example.blackmagicrecipe.data.network.CoffeeProductApiService
+import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.domain.repository.RecipeRepository
 import javax.inject.Inject
@@ -40,6 +42,12 @@ class RecipeRepositoryImpl @Inject constructor(
             val coffeeProductDbEntityList =
                 coffeeProductEntityMapper.mapCoffeeProductDtoListToDbEntityList(coffeeProductDtoList)
             recipeDao.insertCoffeeProductList(coffeeProductDbEntityList)
+        }
+    }
+
+    override suspend fun getProductsBySymbols(query: String): List<CoffeeProduct> {
+        return recipeDao.getProductsBySymbols(query).map {
+            coffeeProductEntityMapper.mapCoffeeProductDbEntityToCoffeeProduct(it)
         }
     }
 }

@@ -22,4 +22,7 @@ interface RecipeDao {
 
     @Insert(entity = CoffeeProductDbEntity::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCoffeeProductList(product: List<CoffeeProductDbEntity>)
+
+    @Query("SELECT * FROM coffee_products WHERE name LIKE '%' ||:query|| '%' ")
+    suspend fun getProductsBySymbols(query: String): List<CoffeeProductDbEntity>
 }
