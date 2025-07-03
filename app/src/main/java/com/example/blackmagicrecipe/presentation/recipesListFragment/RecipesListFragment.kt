@@ -6,10 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.example.blackmagicrecipe.databinding.FragmentRecipesListBinding
+import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.presentation.recipesListFragment.adapters.RecipesAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.Flow
+
 
 @AndroidEntryPoint
 class RecipesListFragment : Fragment() {
@@ -42,8 +50,12 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.recipesList.observe(viewLifecycleOwner) {
-            recipeListAdapter.submitList(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.recipesList.collect {
+                    recipeListAdapter.submitList(it)
+                }
+            }
         }
     }
 
