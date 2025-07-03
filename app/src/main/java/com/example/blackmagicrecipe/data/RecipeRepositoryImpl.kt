@@ -10,6 +10,8 @@ import com.example.blackmagicrecipe.data.network.CoffeeProductApiService
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.domain.repository.RecipeRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,7 +28,7 @@ class RecipeRepositoryImpl @Inject constructor(
         return recipeEntityMapper.mapRecipeDbEntityToRecipe(recipeDbModel)
     }
 
-    override fun getRecipesList(): LiveData<List<Recipe>> {
+    override fun getRecipesList(): Flow<List<Recipe>> {
         return recipeDao.getRecipesList().map {
             recipeEntityMapper.mapRecipeDbEntityListToRecipeList(it)
         }
