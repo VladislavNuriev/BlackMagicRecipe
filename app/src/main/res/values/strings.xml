@@ -34,5 +34,8 @@
     <string name="download_error">Download error</string>
     <string name="begin_typing_coffee_name">Begin typing coffee name</string>
     <string name="non_selected">Non selected</string>
+    <string name="recipes">Recipes</string>
+    <string name="brewing">Brewing</string>
+    <string name="products_updating_failed">Products updating failed. Check Internet connection</string>
 
 </resources>
