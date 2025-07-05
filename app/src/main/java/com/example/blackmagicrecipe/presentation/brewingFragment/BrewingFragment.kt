@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.example.blackmagicrecipe.R
 import com.example.blackmagicrecipe.databinding.FragmentBrewingBinding
+import com.example.blackmagicrecipe.presentation.brewingFragment.BrewingViewModel.Companion.FAILURE
 import com.example.blackmagicrecipe.presentation.brewingFragment.adapters.SearchProductAdapter
-import com.example.blackmagicrecipe.presentation.recipesListFragment.RecipesListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -28,7 +27,7 @@ class BrewingFragment : Fragment() {
 
     private var _binding: FragmentBrewingBinding? = null
     private val binding
-        get() = _binding ?: throw IllegalStateException("binding (FragmentWelcomeBinding) is null")
+        get() = _binding ?: throw IllegalStateException("binding (FragmentBrewingBinding) is null")
 
     private lateinit var searchAdapter: SearchProductAdapter
 
@@ -84,7 +83,6 @@ class BrewingFragment : Fragment() {
     private fun setOnClickListeners() {
         binding.buttonSaveBlackMagic.setOnClickListener {
             fetchValuesFromViews()
-            launchRecipesListFragment()
         }
 
         binding.buttonTimer.setOnClickListener {
@@ -128,8 +126,9 @@ class BrewingFragment : Fragment() {
 
     private fun observeFailures() {
         viewModel.loadingStatus.observe(viewLifecycleOwner) {
-            if ((it != LOADING) and (it != SUCCESS)) {
-                Toast.makeText(requireActivity(), it.toString(), Toast.LENGTH_LONG).show()
+            if (it == FAILURE) {
+                Toast.makeText(requireActivity(),
+                    getString(R.string.products_updating_failed), Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -170,20 +169,5 @@ class BrewingFragment : Fragment() {
         } else {
             binding.imageViewCoffeeBrewing.visibility = View.GONE
         }
-    }
-
-
-    private fun launchRecipesListFragment() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, RecipesListFragment.newInstance())
-            .addToBackStack(RecipesListFragment.NAME)
-            .commit()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = BrewingFragment()
-        const val LOADING = "Loading"
-        const val SUCCESS = "Success"
     }
 }

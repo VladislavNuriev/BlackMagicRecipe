@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/brewingFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_brewing"
+        android:title="@string/brewing" />
+    <item
+        android:id="@+id/recipesListFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_recipes"
+        android:title="@string/recipes" />
+</menu>
+

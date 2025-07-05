@@ -11,12 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.example.blackmagicrecipe.databinding.FragmentRecipesListBinding
-import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.presentation.recipesListFragment.adapters.RecipesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.Flow
 
 
 @AndroidEntryPoint
@@ -63,11 +60,5 @@ class RecipesListFragment : Fragment() {
         recipeListAdapter = RecipesAdapter()
         val recyclerView: RecyclerView = binding.rvRecipeList
         recyclerView.adapter = recipeListAdapter
-    }
-
-    companion object {
-        fun newInstance() = RecipesListFragment()
-        const val NAME = "RecipesListFragment"
-        const val TAG = "RecipesListFragment"
     }
 }

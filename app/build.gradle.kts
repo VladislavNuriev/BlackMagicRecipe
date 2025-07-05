@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.kapt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -61,22 +62,18 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
     //Room dependencies
     implementation(libs.room.runtime)
     kapt (libs.androidx.room.compiler) // Кодогенератор
     implementation (libs.androidx.room.ktx) // Дополнительно для Kotlin Coroutines, Kotlin Flows
-
     //Coroutines dependencies
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-
 //    //Dagger2 dependencies
 //    implementation (libs.dagger)
 //    kapt (libs.dagger.compiler)
-
 
     //Hilt dependencies
     implementation(libs.hilt.android)
@@ -87,4 +84,8 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation (libs.converter.gson)
+
+    //Jetpack Navigation
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 }

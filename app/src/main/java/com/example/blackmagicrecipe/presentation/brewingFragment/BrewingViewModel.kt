@@ -1,8 +1,10 @@
 package com.example.blackmagicrecipe.presentation.brewingFragment
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.example.blackmagicrecipe.domain.models.BrewingType
 import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
@@ -37,7 +39,7 @@ class BrewingViewModel @Inject constructor(
 
     private val _loadingStatus = MutableLiveData<String>()
     val loadingStatus: LiveData<String>
-        get() = _loadingStatus
+        get() = _loadingStatus.distinctUntilChanged()
 
     private val _coffeeProductList = MutableLiveData<List<CoffeeProduct>>()
     val coffeeProductList: LiveData<List<CoffeeProduct>>
@@ -86,7 +88,6 @@ class BrewingViewModel @Inject constructor(
     }
 
     private fun loadCoffeeProductsSafely() {
-        _loadingStatus.value = LOADING
         viewModelScope.launch {
             while (_loadingStatus.value != SUCCESS) {
                 loadCoffeeProducts()
@@ -94,7 +95,8 @@ class BrewingViewModel @Inject constructor(
                         _loadingStatus.value = SUCCESS
                     }
                     .onFailure {
-                        _loadingStatus.value = it.toString()
+                        _loadingStatus.value = FAILURE
+                        Log.d(TAG, "loadCoffeeProductsSafely: ${it}")
                         delay(5000)
                     }
             }
@@ -123,7 +125,8 @@ class BrewingViewModel @Inject constructor(
     }
 
     companion object {
-        const val LOADING = "Loading"
         const val SUCCESS = "Success"
+        const val TAG = "BrewingViewModel"
+        const val FAILURE = "Failure"
     }
 }
