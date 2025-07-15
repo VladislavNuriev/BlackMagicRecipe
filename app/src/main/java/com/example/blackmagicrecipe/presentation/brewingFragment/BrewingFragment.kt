@@ -11,13 +11,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.example.blackmagicrecipe.R
 import com.example.blackmagicrecipe.databinding.FragmentBrewingBinding
 import com.example.blackmagicrecipe.presentation.brewingFragment.BrewingViewModel.Companion.FAILURE
+import com.example.blackmagicrecipe.presentation.brewingFragment.BrewingViewModel.Companion.SUCCESS
 import com.example.blackmagicrecipe.presentation.brewingFragment.adapters.SearchProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -29,7 +35,8 @@ class BrewingFragment : Fragment() {
     private val binding
         get() = _binding ?: throw IllegalStateException("binding (FragmentBrewingBinding) is null")
 
-    private lateinit var searchAdapter: SearchProductAdapter
+    @Inject
+    lateinit var searchAdapter: SearchProductAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +62,6 @@ class BrewingFragment : Fragment() {
 
 
     private fun setupTextViewCoffeeName() {
-        searchAdapter = SearchProductAdapter(requireContext())
         binding.textViewCoffeeName.apply {
             setAdapter(searchAdapter)
             addTextChangedListener(object : TextWatcher {
@@ -117,30 +123,51 @@ class BrewingFragment : Fragment() {
     }
 
     private fun observeCoffeeProductList() {
-        viewModel.coffeeProductList.observe(viewLifecycleOwner) { items ->
-            searchAdapter.clear()
-            searchAdapter.addAll(items)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.coffeeProductList.collect { items ->
+                    searchAdapter.clear()
+                    searchAdapter.productList = items
+                    searchAdapter.addAll(items)
+                }
+            }
         }
     }
 
 
     private fun observeFailures() {
-        viewModel.loadingStatus.observe(viewLifecycleOwner) {
-            if (it == FAILURE) {
-                Toast.makeText(requireActivity(),
-                    getString(R.string.products_updating_failed), Toast.LENGTH_LONG).show()
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.loadingStatus.collect {
+                    if (it == SUCCESS) {
+                        Toast.makeText(
+                            requireActivity(),
+                            getString(R.string.products_updated), Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    if (it == FAILURE) {
+                        Toast.makeText(
+                            requireActivity(),
+                            getString(R.string.products_updating_failed), Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
             }
         }
     }
 
     private fun observeTimerState() {
-        viewModel.isTimerActive.observe(viewLifecycleOwner) {
-            if (it) {
-                startTimer()
-            } else {
-                stopTimer()
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.isTimerActive.collect {
+                    if (it) {
+                        startTimer()
+                    } else {
+                        stopTimer()
+                    }
+                    setupBrewingGif(it)
+                }
             }
-            setupBrewingGif(it)
         }
     }
 
