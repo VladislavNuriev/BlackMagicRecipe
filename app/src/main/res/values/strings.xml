@@ -37,5 +37,6 @@
     <string name="recipes">Recipes</string>
     <string name="brewing">Brewing</string>
     <string name="products_updating_failed">Products updating failed. Check Internet connection</string>
+    <string name="products_updated">Products updated</string>
 
 </resources>

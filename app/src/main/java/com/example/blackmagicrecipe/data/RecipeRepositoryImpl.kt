@@ -1,8 +1,5 @@
 package com.example.blackmagicrecipe.data
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import com.example.blackmagicrecipe.data.database.RecipeDao
 import com.example.blackmagicrecipe.data.mappers.CoffeeProductEntityMapper
 import com.example.blackmagicrecipe.data.mappers.RecipeEntityMapper
@@ -10,8 +7,10 @@ import com.example.blackmagicrecipe.data.network.CoffeeProductApiService
 import com.example.blackmagicrecipe.domain.models.CoffeeProduct
 import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.domain.repository.RecipeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,16 +39,20 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override suspend fun loadCoffeeProducts(): Result<Unit> {
         return runCatching {
-            val coffeeProductDtoList = coffeeProductApiService.getCoffeeProducts()
             val coffeeProductDbEntityList =
-                coffeeProductEntityMapper.mapCoffeeProductDtoListToDbEntityList(coffeeProductDtoList)
+                withContext(context = Dispatchers.IO) {
+                    coffeeProductEntityMapper.mapCoffeeProductDtoListToDbEntityList(
+                        coffeeProductApiService.getCoffeeProducts()
+                    )
+                }
             recipeDao.insertCoffeeProductList(coffeeProductDbEntityList)
         }
     }
 
-    override suspend fun getProductsBySymbols(query: String): List<CoffeeProduct> {
-        return recipeDao.getProductsBySymbols(query).map {
-            coffeeProductEntityMapper.mapCoffeeProductDbEntityToCoffeeProduct(it)
+    override suspend fun getProductsBySymbols(query: String): List<CoffeeProduct> =
+        withContext(context = Dispatchers.IO) {
+            return@withContext recipeDao.getProductsBySymbols(query).map {
+                coffeeProductEntityMapper.mapCoffeeProductDbEntityToCoffeeProduct(it)
+            }
         }
-    }
 }
