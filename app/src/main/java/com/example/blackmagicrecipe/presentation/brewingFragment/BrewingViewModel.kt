@@ -1,10 +1,7 @@
 package com.example.blackmagicrecipe.presentation.brewingFragment
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.example.blackmagicrecipe.domain.models.BrewingType
 import com.example.blackmagicrecipe.domain.models.CoffeeEvaluation
@@ -13,10 +10,10 @@ import com.example.blackmagicrecipe.domain.models.Recipe
 import com.example.blackmagicrecipe.domain.usecases.GetProductsBySymbolsUseCase
 import com.example.blackmagicrecipe.domain.usecases.LoadCoffeeProductsUseCase
 import com.example.blackmagicrecipe.domain.usecases.SaveRecipeUseCase
-import com.example.blackmagicrecipe.presentation.mappers.BrewingTimeUiMapper
+import com.example.blackmagicrecipe.presentation.utils.convertBrewingTimeToInt
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -28,22 +25,18 @@ import javax.inject.Inject
 @HiltViewModel
 class BrewingViewModel @Inject constructor(
     private val saveRecipeUseCase: SaveRecipeUseCase,
-    private val brewingTimeUiMapper: BrewingTimeUiMapper,
     private val loadCoffeeProducts: LoadCoffeeProductsUseCase,
     private val getProductsBySymbols: GetProductsBySymbolsUseCase
 ) : ViewModel() {
 
-    private val _isTimerActive = MutableLiveData<Boolean>()
-    val isTimerActive: LiveData<Boolean>
-        get() = _isTimerActive
+    private val _isTimerActive = MutableStateFlow<Boolean>(false)
+    val isTimerActive = _isTimerActive.asStateFlow()
 
-    private val _loadingStatus = MutableLiveData<String>()
-    val loadingStatus: LiveData<String>
-        get() = _loadingStatus.distinctUntilChanged()
+    private val _loadingStatus = MutableStateFlow<String>(INITIAL)
+    val loadingStatus = _loadingStatus.asStateFlow()
 
-    private val _coffeeProductList = MutableLiveData<List<CoffeeProduct>>()
-    val coffeeProductList: LiveData<List<CoffeeProduct>>
-        get() = _coffeeProductList
+    private val _coffeeProductList = MutableStateFlow<List<CoffeeProduct>>(emptyList())
+    val coffeeProductList = _coffeeProductList.asStateFlow()
 
     private val _searchFlow = MutableStateFlow("")
 
@@ -74,7 +67,7 @@ class BrewingViewModel @Inject constructor(
             coffeeNameStr, "Kenya", "V60",
             "Sweet", "88", "100", "hhttpp"
         )
-        val brewingTime = brewingTimeUiMapper.convertBrewingTimeStringToInt(brewingTimeStr)
+        val brewingTime = brewingTimeStr.convertBrewingTimeToInt()
         val evaluation = CoffeeEvaluation(acidity, body, sweetness, rating)
         val newRecipe = Recipe(
             brewingType,
@@ -89,17 +82,14 @@ class BrewingViewModel @Inject constructor(
 
     private fun loadCoffeeProductsSafely() {
         viewModelScope.launch {
-            while (_loadingStatus.value != SUCCESS) {
-                loadCoffeeProducts()
-                    .onSuccess {
-                        _loadingStatus.value = SUCCESS
-                    }
-                    .onFailure {
-                        _loadingStatus.value = FAILURE
-                        Log.d(TAG, "loadCoffeeProductsSafely: ${it}")
-                        delay(5000)
-                    }
-            }
+            loadCoffeeProducts()
+                .onSuccess {
+                    _loadingStatus.value = SUCCESS
+                }
+                .onFailure {
+                    _loadingStatus.value = FAILURE
+                    Log.d(TAG, "loadCoffeeProductsSafely: ${it}")
+                }
         }
     }
 
@@ -126,7 +116,8 @@ class BrewingViewModel @Inject constructor(
 
     companion object {
         const val SUCCESS = "Success"
-        const val TAG = "BrewingViewModel"
+        const val INITIAL = "Initial"
+        const val TAG = "LOADING_VIEWMODEL"
         const val FAILURE = "Failure"
     }
 }
