@@ -22,7 +22,6 @@ object DatabaseModule {
             RecipeDataBase::class.java,
             "recipes.db"
         )
-            .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
     }
